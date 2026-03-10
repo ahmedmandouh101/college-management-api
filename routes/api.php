@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\DepartmentController;
 use App\Http\Controllers\Api\Admin\CourseController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Teacher\GradeController;
+use App\Http\Controllers\Api\Student\EnrollmentController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -30,5 +31,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('isTeacher')->group(function () {
         Route::get('/my-courses', [GradeController::class, 'myCourses']);
         Route::post('/grades', [GradeController::class, 'store']);
-        });    
+    });    
+
+    Route::middleware('isStudent')->group(function () {
+        Route::get('/my-enrollments', [EnrollmentController::class, 'myCourses']);
+        Route::post('/enroll', [EnrollmentController::class, 'enroll']);
+        Route::get('/my-grades', [EnrollmentController::class, 'myGrades']);
+    });
 });
