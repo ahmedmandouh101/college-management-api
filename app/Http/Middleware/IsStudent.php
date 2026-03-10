@@ -10,7 +10,7 @@ class IsStudent
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role !== 'student') {
+        if (!$request->user() || $request->user()->role !== 'student') {
             return response()->json([
                 'message' => 'Unauthorized - Students only'
             ], 403);
