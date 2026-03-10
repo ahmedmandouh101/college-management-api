@@ -11,11 +11,7 @@ class IsTeacher
     public function handle(Request $request, Closure $next)
     {
 
-        dd([
-            'user' => $request->user(),
-            'token' => $request->bearerToken(),
-            'headers' => $request->headers->all()
-        ]);
+
         if (!$request->user() || $request->user()->role !== 'teacher') {
             return response()->json([
                 'message' => 'Unauthorized - Teachers only'
