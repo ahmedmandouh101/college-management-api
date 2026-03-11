@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use App\Http\Resources\UserResource;
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -30,7 +30,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'User registered successfully',
             'token'   => $token,
-            'user'    => $user
+            'user'    => new UserResource($user)
         ], 201);
     }
 
@@ -54,7 +54,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful',
             'token'   => $token,
-            'user'    => $user
+            'user'    => new UserResource($user)
         ], 200);
     }
 

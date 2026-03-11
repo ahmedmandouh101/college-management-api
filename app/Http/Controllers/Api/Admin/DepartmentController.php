@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\DepartmentResource;
 class DepartmentController extends Controller
 {
     public function index(){
         $departments = Department::all();
         return response()->json([
             'message' => 'Departments retrieved successfully',
-            'data'    => $departments
+            'data'    => DepartmentResource::collection($departments)
         ], 200);
     }
 
@@ -27,7 +27,7 @@ class DepartmentController extends Controller
         ]);
         return response()->json([
             'message' => 'Department created successfully',
-            'data'    => $department
+            'data'    => new DepartmentResource($department)
         ], 201);
     }
 
@@ -35,7 +35,7 @@ class DepartmentController extends Controller
     public function show(Department $department){
         return response()->json([
             'message' => 'Department retrieved successfully',
-            'data'    => $department
+            'data'    => new DepartmentResource($department)
         ], 200);
     }
 
@@ -48,7 +48,7 @@ class DepartmentController extends Controller
 
         return response()->json([
             'message' => 'Department updated successfully',
-            'data'    => $department
+            'data'    => new DepartmentResource($department)
         ], 200);
     }
 

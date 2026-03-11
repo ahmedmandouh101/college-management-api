@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Http\Resources\CourseResource;
 
 class CourseController extends Controller
 {
@@ -14,7 +15,7 @@ class CourseController extends Controller
 
         return response()->json([
             'message' => 'Courses retrieved successfully',
-            'data'    => $courses
+            'data'    => CourseResource::collection($courses)
         ], 200);
     }
 
@@ -38,7 +39,7 @@ class CourseController extends Controller
 
         return response()->json([
             'message' => 'Course created successfully',
-            'data'    => $course->load(['department', 'teacher'])
+            'data'    => new CourseResource($course->load(['department', 'teacher']))
         ], 201);
     }
 
@@ -46,7 +47,7 @@ class CourseController extends Controller
     {
         return response()->json([
             'message' => 'Course retrieved successfully',
-            'data'    => $course->load(['department', 'teacher'])
+            'data'    => new CourseResource($course->load(['department', 'teacher']))
         ], 200);
     }
 
@@ -66,7 +67,7 @@ class CourseController extends Controller
 
         return response()->json([
             'message' => 'Course updated successfully',
-            'data'    => $course->load(['department', 'teacher'])
+            'data'    => new CourseResource($course->load(['department', 'teacher']))
         ], 200);
     }
 

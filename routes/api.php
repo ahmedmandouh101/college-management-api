@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'index', 'store', 'destroy'
         ]);
 
-    });
+    }); 
 
     Route::middleware('isTeacher')->group(function () {
         Route::get('/my-courses', [GradeController::class, 'myCourses']);

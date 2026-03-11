@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use App\Http\Resources\UserResource;
 class UserController extends Controller
 {
     public function index()
@@ -16,7 +16,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Users retrieved successfully',
-            'data'    => $users
+            'data'    => UserResource::collection($users)
         ], 200);
     }
 
@@ -47,7 +47,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User created successfully',
-            'data'    => $user->load('student')
+            'data'    => new UserResource($user->load('student'))
         ], 201);
     }
 
