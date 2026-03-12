@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Course;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\EnrollRequest;
+use App\Http\Resources\EnrollmentResource;
+use App\Http\Resources\GradeResource;
 class EnrollmentController extends Controller
 {
     public function myCourses(Request $request)
@@ -25,16 +27,12 @@ class EnrollmentController extends Controller
 
         return response()->json([
             'message' => 'Courses retrieved successfully',
-            'data'    => $enrollments
+            'data'    => EnrollmentResource::collection($enrollments)
         ], 200);
     }
 
-    public function enroll(Request $request)
+    public function enroll(EnrollRequest $request)
     {
-        $request->validate([
-            'course_id' => 'required|exists:courses,id'
-        ]);
-
         $student = $request->user()->student;
 
         if (!$student) {
@@ -53,10 +51,7 @@ class EnrollmentController extends Controller
             ], 409);
         }
 
-        $enrollment = Enrollment::create([
-            'student_id' => $student->id,
-            'course_id'  => $request->course_id
-        ]);
+        $enrollment = Enrollment::create($request->validated());
 
         return response()->json([
             'message' => 'Enrolled successfully',
@@ -87,7 +82,7 @@ class EnrollmentController extends Controller
 
         return response()->json([
             'message' => 'Grades retrieved successfully',
-            'data'    => $grades
+            'data'    => GradeResource::collection($grades)
         ], 200);
     }
 }

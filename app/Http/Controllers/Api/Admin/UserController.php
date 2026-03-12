@@ -8,6 +8,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
+use App\Http\Requests\StoreUserRequest;
 class UserController extends Controller
 {
     public function index()
@@ -20,22 +21,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest  $request)
     {
-        $request->validate([
-            'name'          => 'required|string|max:255',
-            'email'         => 'required|string|email|unique:users',
-            'password'      => 'required|string|min:6',
-            'role'          => 'required|in:teacher,student',
-            'department_id' => 'required_if:role,student|exists:departments,id'
-        ]);
-
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role
-        ]);
+        $user = User::create($request->validated());
 
         if ($request->role === 'student') {
             Student::create([

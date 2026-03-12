@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Resources\DepartmentResource;
+use App\Http\Requests\StoreDepartmentRequest;   
+use App\Http\Requests\UpdateDepartmentRequest;
 class DepartmentController extends Controller
 {
     public function index(){
@@ -16,15 +18,8 @@ class DepartmentController extends Controller
         ], 200);
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:departments',
-        ]);
-        $department = Department::create([
-            'name' => $request->name,
-            'code' => $request->code,
-        ]);
+    public function store(StoreDepartmentRequest  $request){
+        $department = Department::create($request->validated());
         return response()->json([
             'message' => 'Department created successfully',
             'data'    => new DepartmentResource($department)
@@ -39,12 +34,8 @@ class DepartmentController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, Department $department){
-        $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'code' => 'sometimes|string|unique:departments,code,' . $department->id,
-        ]);
-        $department->update($request->only(['name', 'code']));
+    public function update(UpdateDepartmentRequest $request, Department $department){
+        $department->update($request->validated());
 
         return response()->json([
             'message' => 'Department updated successfully',

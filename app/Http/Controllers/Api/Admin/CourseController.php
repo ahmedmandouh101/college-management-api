@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Resources\CourseResource;
-
+use App\Http\Requests\StoreCourseRequest;
 class CourseController extends Controller
 {
     public function index()
@@ -19,24 +19,9 @@ class CourseController extends Controller
         ], 200);
     }
 
-    public function store(Request $request)
+    public function store(StoreCourseRequest  $request)
     {
-        $request->validate([
-            'name'          => 'required|string|max:255',
-            'code'          => 'required|string|unique:courses',
-            'department_id' => 'required|exists:departments,id',
-            'teacher_id'    => 'required|exists:users,id',
-            'credits'       => 'required|integer|min:1|max:6'
-        ]);
-
-        $course = Course::create([
-            'name'          => $request->name,
-            'code'          => $request->code,
-            'department_id' => $request->department_id,
-            'teacher_id'    => $request->teacher_id,
-            'credits'       => $request->credits
-        ]);
-
+        $course = Course::create($request->validated());
         return response()->json([
             'message' => 'Course created successfully',
             'data'    => new CourseResource($course->load(['department', 'teacher']))

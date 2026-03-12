@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Grade;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\AssignGradeRequest;
 class GradeController extends Controller
 {
     public function myCourses(Request $request)
@@ -21,13 +21,8 @@ class GradeController extends Controller
         ], 200);
     }
 
-    public function store(Request $request)
+    public function store(AssignGradeRequest  $request)
     {
-        $request->validate([
-            'enrollment_id' => 'required|exists:enrollments,id',
-            'grade'         => 'required|numeric|min:0|max:100',
-        ]);
-
         $enrollment = Enrollment::findOrFail($request->enrollment_id);
 
         // Make sure this teacher owns this course
