@@ -1,4 +1,4 @@
-# College Management System API
+# College Management System 
 
 A RESTful API built with Laravel for managing a college system with three roles: Admin, Teacher, and Student.
 
